@@ -21,8 +21,8 @@ cd your-repo
 docker-compose up --build
 ```
 
-- Дождитесь запуска контейнеров. По умолчанию приложение будет доступно по адресу:
-  http://localhost:8082/bank/service/api
+- Дождитесь запуска контейнеров
+- По умолчанию приложение будет доступно по адресу: http://localhost:8082/bank/service/api
 - Swagger UI:  http://localhost:8082/bank/service/api/swagger-ui.html
 - OpenAPI: http://localhost:8082/bank/service/api/v3/api-docs
 - Переменные: настройки в .env (JWT, шифрование, порты и т.д.)
