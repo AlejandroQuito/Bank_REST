@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006
+      author: AleksandrKozlov
+      changes:
+        - insert:
+            tableName: card_status
+            columns:
+              - column:
+                  name: name
+                  value: ACTIVE
+        - insert:
+            tableName: card_status
+            columns:
+              - column:
+                  name: name
+                  value: BLOCKED
+        - insert:
+            tableName: card_status
+            columns:
+              - column:
+                  name: name
+                  value: EXPIRED

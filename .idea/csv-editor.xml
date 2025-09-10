@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CsvFileAttributes">
+    <option name="attributeMap">
+      <map>
+        <entry key="C:\Users\Comp\Desktop\FAANG\CorpX\userService\build\resources\main\files\students.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\CorpX\userService\src\main\resources\files\students.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\CorporationX Full\CorporationX\user_service\src\main\resources\files\students.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\CorporationX Full\user_service\src\main\resources\files\students.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\100k.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\10k in 1h 0% error.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\10k in 1s.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\10k in 40s (no error).csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\10k in 600s (0% error).csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\10k in 60s (0% error).csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\10k.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\2,5k in 1s (no cache) .csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\2.5k in 1s (cache) .csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\2k in 1s (cache).csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\2k in 1s (no cache).csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\5k in 5s.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\Result Test\6k in 1s (cache).csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\Тест контроллера\urls.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\Comp\Desktop\FAANG\для cv\java_bootcamp_2025-04-06_07.39pm.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

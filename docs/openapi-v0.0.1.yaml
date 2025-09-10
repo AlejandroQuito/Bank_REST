@@ -1,0 +1,823 @@
+openapi: 3.1.0
+info:
+  title: Bank Cards Management API
+  description: Документация API для управления банковскими картами
+  contact:
+    name: Effective Mobile Team
+    email: support@demo.com
+  version: 0.0.1
+servers:
+  - url: http://localhost:8082/bank/service/api
+    description: Generated server url
+security:
+  - bearerAuth: []
+tags:
+  - name: Users
+    description: User management (admin)
+  - name: Cards
+    description: Operations with cards
+paths:
+  "/v1/users/registration":
+    post:
+      tags:
+        - user-controller
+      operationId: registration
+      summary: Регистрация пользователя
+      description: Создание нового пользователя в системе
+      requestBody:
+        description: Данные для регистрации
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RegisterRequest"
+        required: true
+      responses:
+        '201':
+          description: Успешная регистрация с выдачей токенов
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/AuthResponse"
+        '500':
+          description: Ошибка при регистрации
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+  "/v1/users/refresh-tokens":
+    post:
+      tags:
+        - user-controller
+      operationId: refresh
+      summary: Обновление JWT токенов
+      description: Получение новых access и refresh токенов
+      requestBody:
+        description: Refresh токен
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RefreshRequest"
+        required: true
+      responses:
+        '200':
+          description: Успешное обновление токенов
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/AuthResponse"
+        '401':
+          description: Неверный refresh токен
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+  "/v1/users/login":
+    post:
+      tags:
+        - user-controller
+      operationId: login
+      summary: Вход пользователя
+      description: Аутентификация пользователя и получение JWT токенов
+      requestBody:
+        description: Учетные данные пользователя
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        '200':
+          description: Успешный вход с выдачей токенов
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/AuthResponse"
+        '401':
+          description: Неверный логин или пароль
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+  "/v1/cards":
+    get:
+      tags:
+        - Cards
+      operationId: read
+      summary: Получение списка карт с пагинацией и фильтрацией
+      parameters:
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: size
+          in: query
+          description: Размер страницы
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: status
+          in: query
+          description: Статус карты для фильтрации
+          required: false
+          schema:
+            type: string
+            enum:
+              - ACTIVE
+              - BLOCKED
+              - EXPIRED
+        - name: owner
+          in: query
+          description: Владелец карты для фильтрации
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список карт
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/PageCardResponse"
+        '403':
+          description: Доступ запрещён
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Cards
+      operationId: create
+      summary: Создание новой карты
+      description: Создание новой банковской карты (требуются права ADMIN)
+      requestBody:
+        description: Данные для создания карты
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CardDTO"
+        required: true
+      responses:
+        '201':
+          description: Карта успешно создана
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/CardResponse"
+        '400':
+          description: Неверные входные данные
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Доступ запрещён (требуется роль ADMIN)
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+      security:
+        - bearerAuth: []
+  "/v1/cards/{id}/block":
+    post:
+      tags:
+        - Cards
+      operationId: requestBlock
+      summary: Запрос на блокировку карты пользователем
+      parameters:
+        - name: id
+          in: path
+          description: ID карты
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Карта заблокирована
+        '400':
+          description: Неверный идентификатор карты
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Доступ запрещён (требуется роль USER)
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+      security:
+        - bearerAuth: []
+  "/v1/cards/{id}/block-admin":
+    post:
+      tags:
+        - Cards
+      operationId: blockByAdmin
+      summary: Блокировка карты администратором
+      parameters:
+        - name: id
+          in: path
+          description: ID карты
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Карта заблокирована
+        '403':
+          description: Доступ запрещён (требуется роль ADMIN)
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+      security:
+        - bearerAuth: []
+  "/v1/cards/{id}/activate":
+    post:
+      tags:
+        - Cards
+      operationId: activateByAdmin
+      summary: Активация карты администратором
+      parameters:
+        - name: id
+          in: path
+          description: ID карты
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Карта активирована
+        '403':
+          description: Доступ запрещён (требуется роль ADMIN)
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+      security:
+        - bearerAuth: []
+  "/v1/cards/transfer":
+    post:
+      tags:
+        - Cards
+      operationId: transfer
+      summary: Перевод между картами
+      requestBody:
+        description: Данные для перевода
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TransferDTO"
+        required: true
+      responses:
+        '200':
+          description: Перевод успешно выполнен
+        '400':
+          description: Неверные данные для перевода
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Доступ запрещён (требуется роль USER)
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+      security:
+        - bearerAuth: []
+  "/v1/admin/users":
+    get:
+      tags:
+        - Users
+      operationId: list
+      summary: Список пользователей
+      description: Получение списка всех пользователей (только для ADMIN)
+      parameters:
+        - name: q
+          in: query
+          description: Поисковый запрос
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: size
+          in: query
+          description: Размер страницы
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: Список пользователей
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/PageUserResponse"
+    post:
+      tags:
+        - Users
+      operationId: create_1
+      summary: Создать пользователя
+      description: Создание нового пользователя (только для ADMIN)
+      requestBody:
+        description: Данные нового пользователя
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserDTO"
+        required: true
+      responses:
+        '201':
+          description: Пользователь успешно создан
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/UserResponse"
+  "/v1/cards/{id}":
+    get:
+      tags:
+        - Cards
+      operationId: getById
+      summary: Получение карты по ID
+      description: Получение информации о конкретной карте
+      parameters:
+        - name: id
+          in: path
+          description: ID карты
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Информация о карте
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/CardResponse"
+        '403':
+          description: Доступ запрещён
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Cards
+      operationId: delete
+      summary: Удаление карты
+      description: Удаление карты (требуются права ADMIN)
+      parameters:
+        - name: id
+          in: path
+          description: ID карты
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Карта успешно удалена
+        '400':
+          description: Неверный идентификатор карты
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Доступ запрещён (требуется роль ADMIN)
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - Cards
+      operationId: update
+      summary: Обновление карты
+      description: Обновление данных карты (требуются права ADMIN)
+      parameters:
+        - name: id
+          in: path
+          description: ID карты
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Новые данные карты
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CardDTO"
+        required: true
+      responses:
+        '200':
+          description: Карта успешно обновлена
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/CardResponse"
+        '400':
+          description: Неверные входные данные
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Доступ запрещён (требуется роль ADMIN)
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+      security:
+        - bearerAuth: []
+  "/v1/admin/users/{id}":
+    delete:
+      tags:
+        - Users
+      operationId: delete_1
+      summary: Удалить пользователя
+      description: Удаление пользователя (только для ADMIN)
+      parameters:
+        - name: id
+          in: path
+          description: ID пользователя
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Пользователь удален
+    patch:
+      tags:
+        - Users
+      operationId: update_1
+      summary: Обновить пользователя
+      description: Обновление данных пользователя (только для ADMIN)
+      parameters:
+        - name: id
+          in: path
+          description: ID пользователя
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Новые данные пользователя
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserUpdateDTO"
+        required: true
+      responses:
+        '200':
+          description: Данные пользователя обновлены
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/UserResponse"
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      description: Запрос на регистрацию пользователя
+      properties:
+        username:
+          type: string
+          description: Имя пользователя (3-50 символов)
+          maxLength: 50
+          minLength: 3
+          example: user1
+        password:
+          type: string
+          description: Пароль (минимум 6 символов)
+          format: password
+          maxLength: 100
+          minLength: 6
+          example: pass1234
+        role:
+          type: string
+          description: Роль пользователя
+          enum:
+            - ADMIN
+            - USER
+          example: USER
+      required:
+        - password
+        - role
+        - username
+    AuthResponse:
+      type: object
+      description: Ответ с JWT токенами
+      properties:
+        accessToken:
+          type: string
+          description: Access токен для авторизации
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        refreshToken:
+          type: string
+          description: Refresh токен для обновления access токена
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      required:
+        - accessToken
+        - refreshToken
+    RefreshRequest:
+      type: object
+      description: Запрос на обновление токенов
+      properties:
+        refreshToken:
+          type: string
+          description: Refresh токен
+          minLength: 1
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      required:
+        - refreshToken
+    LoginRequest:
+      type: object
+      description: Запрос на вход в систему
+      properties:
+        username:
+          type: string
+          description: Имя пользователя
+          minLength: 1
+          example: user1
+        password:
+          type: string
+          description: Пароль
+          minLength: 1
+          example: pass1234
+      required:
+        - password
+        - username
+    CardDTO:
+      type: object
+      description: DTO для создания/обновления карты
+      properties:
+        number:
+          type: string
+          description: Полный номер карты (16 цифр), будет зашифрован
+          minLength: 1
+          pattern: "\\d{16}"
+          example: '1234567812345678'
+        ownerId:
+          type: integer
+          description: Идентификатор владельца (пользователя)
+          format: int64
+          example: 1
+        expiration:
+          type: string
+          description: Дата окончания действия
+          format: date-time
+          example: '2026-12-31'
+        balance:
+          type: integer
+          description: Начальный баланс
+          format: int64
+          example: 1000
+      required:
+        - balance
+        - expiration
+        - number
+        - ownerId
+    CardResponse:
+      type: object
+      description: Банковская карта (ответ)
+      properties:
+        id:
+          type: integer
+          description: ID карты
+          format: int64
+          example: 1
+        cardNumber:
+          type: string
+          description: Маскированный номер карты
+          example: "**** **** **** 1234"
+        owner:
+          type: string
+          description: Владелец карты
+          example: John Doe
+        expiryDate:
+          type: string
+          description: Дата окончания действия
+          format: date-time
+          example: '2026-12-31'
+        status:
+          type: string
+          description: Статус карты
+          example: ACTIVE
+        balance:
+          type: integer
+          description: Баланс карты
+          format: int64
+          example: 1000
+    TransferDTO:
+      type: object
+      description: DTO для перевода между картами
+      properties:
+        fromCardId:
+          type: integer
+          description: ID карты отправителя
+          format: int64
+          example: 1
+        toCardId:
+          type: integer
+          description: ID карты получателя
+          format: int64
+          example: 2
+        amount:
+          type: integer
+          description: Сумма перевода
+          format: int64
+          example: 500
+      required:
+        - amount
+        - fromCardId
+        - toCardId
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+          maxLength: 50
+          minLength: 3
+        password:
+          type: string
+          maxLength: 100
+          minLength: 6
+        role:
+          type: string
+          enum:
+            - ADMIN
+            - USER
+      required:
+        - password
+        - role
+        - username
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        role:
+          type: string
+          enum:
+            - ADMIN
+            - USER
+    UserUpdateDTO:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 50
+          minLength: 3
+        password:
+          type: string
+          maxLength: 100
+          minLength: 6
+        role:
+          type: string
+          enum:
+            - ADMIN
+            - USER
+    ErrorResponse:
+      type: object
+      description: Ответ об ошибке
+      properties:
+        message:
+          type: string
+          description: Сообщение об ошибке
+          example: Error message
+        status:
+          type: integer
+          description: HTTP статус код
+          example: 400
+        timestamp:
+          type: string
+          description: Время возникновения ошибки
+          format: date-time
+          example: '2025-08-08T15:16:00Z'
+    PageCardResponse:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CardResponse"
+        number:
+          type: integer
+          format: int32
+        sort:
+          "$ref": "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          "$ref": "#/components/schemas/SortObject"
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        unsorted:
+          type: boolean
+        sorted:
+          type: boolean
+    PageUserResponse:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UserResponse"
+        number:
+          type: integer
+          format: int32
+        sort:
+          "$ref": "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

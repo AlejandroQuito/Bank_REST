@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: db/changeset/001-create-users.yaml
+  - include:
+      file: db/changeset/002-create-card-status.yaml
+  - include:
+      file: db/changeset/003-create-cards.yaml
+  - include:
+      file: db/changeset/004-create-transfers.yaml
+  - include:
+      file: db/changeset/005-alter-card-status-name-length.yaml
+  - include:
+      file: db/changeset/006-insert-card-statuses.yaml

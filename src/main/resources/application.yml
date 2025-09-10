@@ -1,8 +1,73 @@
-#
-# application.yml — главный конфигурационный файл Spring Boot.
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME:Bank_REST}
 
-Что нужно сделать:
-  - Указать настройки подключения к базе данных.
-  - Указать порт приложения.
-  - Настроить параметры безопасности и JWT.
-  - Включить Swagger UI.
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/bankcards}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.postgresql.Driver}
+
+  liquibase:
+    enabled: ${SPRING_LIQUIBASE_ENABLED:true}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}
+    properties:
+      hibernate:
+        format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL:true}
+
+  security:
+    jwt:
+      secret: ${JWT_ACCESS_SECRET:a78c7e3ad8f446d9b6156a67b40b9dc28fa1d9ce72d884a195347d5b13886ad9}
+      access-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000}
+      refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}
+
+    ignored-paths: ${JWT_IGNORED_PATHS:/v1/users/registration,/swagger-ui/**,/v3/api-docs/**,/swagger-ui.html}
+
+  data:
+    redis:
+      password: ${REDIS_PASSWORD:password}
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+  cache:
+    type: ${SPRING_CACHE_TYPE:redis}
+    redis:
+      time-to-live: ${SPRING_CACHE_REDIS_TIME_TO_LIVE:86400}
+
+springdoc:
+  api-docs:
+    path: ${SPRINGDOC_API_DOCS_PATH:/v3/api-docs}
+    groups:
+      enabled: ${SPRINGDOC_API_DOCS_GROUPS_ENABLED:true}
+  swagger-ui:
+    path: ${SPRINGDOC_SWAGGER_UI_PATH:/swagger-ui.html}
+  paths-to-match: ${SPRINGDOC_PATHS_TO_MATCH:/**}
+  show-actuator: ${SPRINGDOC_SHOW_ACTUATOR:true}
+
+card:
+  status:
+    active: ${CARD_STATUS_ACTIVE:ACTIVE}
+    blocked: ${CARD_STATUS_BLOCKED:BLOCKED}
+    expired: ${CARD_STATUS_EXPIRED:EXPIRED}
+  number:
+    mask-pattern: ${CARD_NUMBER_MASK_PATTERN:**** **** **** %s}
+    visible-digits: ${CARD_NUMBER_VISIBLE_DIGITS:4}
+
+encryption:
+  key: ${ENCRYPTION_KEY:your-16-char-key}
+  algorithm: ${ENCRYPTION_ALGORITHM:AES/GCM/NoPadding}
+  iv-length: ${ENCRYPTION_IV_LENGTH:12}
+  tag-length: ${ENCRYPTION_TAG_LENGTH:16}
+  charset: ${ENCRYPTION_CHARSET:UTF-8}
+  masking-pattern: ${ENCRYPTION_MASKING_PATTERN:**** **** **** %s}
+
+server:
+  port: ${SERVER_PORT:8082}
+  servlet:
+    context-path: ${SERVER_CONTEXT_PATH:/bank/service/api}
+
+debug: ${DEBUG:false}
