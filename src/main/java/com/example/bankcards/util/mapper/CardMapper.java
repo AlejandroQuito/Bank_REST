@@ -18,7 +18,7 @@ public interface CardMapper {
     @Mapping(source = "status", target = "status", qualifiedByName = "mapStatus")
     CardResponse toResponse(Card card);
 
-    @Mapping(source = "number", target = "cardNumber", qualifiedByName = "mask")
+    @Mapping(source = "number", target = "cardNumber", qualifiedByName = "maskCardNumber")
     @Mapping(source = "owner", target = "owner", qualifiedByName = "mapOwner")
     @Mapping(source = "expiration", target = "expiryDate")
     @Mapping(source = "status", target = "status", qualifiedByName = "mapStatus")

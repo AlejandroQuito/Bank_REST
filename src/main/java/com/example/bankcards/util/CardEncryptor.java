@@ -32,12 +32,6 @@ public class CardEncryptor {
         log.info("CardEncryptor initialized successfully with algorithm: {}", properties.getAlgorithm());
     }
 
-    private void validateKey(String key) {
-        if (key == null || key.length() != 16) {
-            throw new EncryptionException("Encryption key must be 16 characters long");
-        }
-    }
-
     @Named("encrypt")
     public String encrypt(String data) {
         try {
@@ -78,15 +72,6 @@ public class CardEncryptor {
         }
     }
 
-    @Named("mask")
-    public String mask(String decryptedNumber) {
-        if (decryptedNumber == null || decryptedNumber.length() < 4) {
-            return String.format(properties.getMaskingPattern(), "****");
-        }
-        String lastFour = decryptedNumber.substring(decryptedNumber.length() - 4);
-        return String.format(properties.getMaskingPattern(), lastFour);
-    }
-
     @Named("maskCardNumber")
     public String maskCardNumber(String encryptedCardNumber) {
         try {
@@ -94,6 +79,21 @@ public class CardEncryptor {
             return mask(decrypted);
         } catch (Exception e) {
             return String.format(properties.getMaskingPattern(), "****");
+        }
+    }
+
+    private String mask(String decryptedNumber) {
+        if (decryptedNumber == null || decryptedNumber.length() < 4) {
+            return String.format(properties.getMaskingPattern(), "****");
+        }
+
+        String lastFour = decryptedNumber.substring(decryptedNumber.length() - 4);
+        return String.format(properties.getMaskingPattern(), lastFour);
+    }
+
+    private void validateKey(String key) {
+        if (key == null || key.length() != 16) {
+            throw new EncryptionException("Encryption key must be 16 characters long");
         }
     }
 }
