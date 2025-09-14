@@ -82,6 +82,7 @@ public class CardEncryptor {
         }
     }
 
+    @Named("mask")
     private String mask(String decryptedNumber) {
         if (decryptedNumber == null || decryptedNumber.length() < 4) {
             return String.format(properties.getMaskingPattern(), "****");

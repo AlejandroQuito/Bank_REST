@@ -26,5 +26,5 @@ public class CardStatus {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name; // ACTIVE, BLOCKED, EXPIRED
+    private String name;
 }

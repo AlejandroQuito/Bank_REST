@@ -33,7 +33,7 @@ public class Card {
     private Long id;
 
     @Column(name = "number", nullable = false, unique = true)
-    private String number; // Зашифрованный номер
+    private String number;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)

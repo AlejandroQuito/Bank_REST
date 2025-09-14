@@ -25,12 +25,12 @@ spring:
       access-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000}
       refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}
 
-    ignored-paths: ${JWT_IGNORED_PATHS:/v1/users/registration,/swagger-ui/**,/v3/api-docs/**,/swagger-ui.html}
+    ignored-paths: ${JWT_IGNORED_PATHS:/v1/users/**,/swagger-ui/**,/v3/api-docs/**,/swagger-ui.html}
 
   data:
     redis:
       password: ${REDIS_PASSWORD:password}
-      host: ${REDIS_HOST:localhost}
+      host: ${REDIS_HOST:redis}
       port: ${REDIS_PORT:6379}
 
   cache:
